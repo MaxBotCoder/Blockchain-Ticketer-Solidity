@@ -2,14 +2,27 @@
 pragma solidity ^0.8.13;
 
 contract InitializationContract{
+
+    //Total amount of money stored within the smartcontract itself.
+    uint public totalbalance;
+
+    //Transfers ticket purchasing system configuration over to ticker smart contract.
     ticketer public ticketermaker;
     function deployticketer (uint _1stclassprice, uint _2ndclassprice, uint _3rdclassprice) public {
         ticketermaker = new ticketer(msg.sender, _1stclassprice, _2ndclassprice, _3rdclassprice);
     }
+
+    //Configures the value of total balance variable
+    fallback() external payable {
+        totalbalance = msg.value;
+    }
 }
 
 contract ticketer{
-
+    
+    /*Mappings for temporary value to prevent double dipping and getting multiple tickets
+    from a single purchase. Mapping for class determination system. 
+    Permanent storage for creator address aswell as storage variable for total value.*/
     mapping(address => uint) passthroughvalue;
     mapping(address => uint) currentvalue;
     mapping(address => uint) Class;
@@ -19,6 +32,7 @@ contract ticketer{
     uint public _1stclassprice;
     address CreatorAddress;
 
+    //Constuctor for setting ticket price aswell as setting the creator address.
     constructor(address creator, uint _1stprice, uint _2ndprice, uint _3rdprice) {
         CreatorAddress = creator;
         _3rdclassprice = _3rdprice;
@@ -26,12 +40,18 @@ contract ticketer{
         _1stclassprice = _1stprice;
     }
 
+    /*Struct to save ticketing info, this only saves class however the capabilities can be
+    expanded to store additional and or alternative ticketing information.*/
     struct Ticketer {
         uint class;
      }
-
+     
+     //Mapping for setting struct value and or values depending on struct configuration.
      mapping(address => Ticketer) public ticket;
-
+     
+     /*Function to purchase a ticket. Which also allows ticket purchaser
+     to select their class aswell. Will only set desired struct data 
+     if and only if the purchasing conditions are made.*/
      function buyticket(uint class) payable public {
         totalvalue = msg.value;
         passthroughvalue[msg.sender] + msg.value;
