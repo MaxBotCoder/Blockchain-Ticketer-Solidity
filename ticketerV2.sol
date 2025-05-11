@@ -57,11 +57,11 @@ contract ticketer{
         passthroughvalue[msg.sender] + msg.value;
         currentvalue[msg.sender] + passthroughvalue[msg.sender];
         passthroughvalue[msg.sender] = 0;
-        if(currentvalue[msg.sender] == 15 && class == _3rdclassprice) {
+        if(currentvalue[msg.sender] == _3rdclassprice && class == 3) {
             ticket[msg.sender] = Ticketer(class = 3);
-        } else if (currentvalue[msg.sender] == 30 && class == _2ndclassprice) {
+        } else if (currentvalue[msg.sender] == _2ndclassprice && class == 2) {
             ticket[msg.sender] = Ticketer(class = 2);
-        } else if (currentvalue[msg.sender] == 45 && class == _1stclassprice) {
+        } else if (currentvalue[msg.sender] == _1stclassprice && class == 1) {
             ticket[msg.sender] = Ticketer(class = 1);
         } else {
             payable(msg.sender).call{value: currentvalue[msg.sender]}("");
