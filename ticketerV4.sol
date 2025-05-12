@@ -24,7 +24,7 @@ contract ticketer{
     from a single purchase. Mapping for class determination system. 
     Permanent storage for creator address aswell as storage variable for total value.*/
     mapping(address => uint) passthroughvalue;
-    mapping(address => uint) currentvalue;
+    mapping(address => uint) public currentvalue;
     mapping(address => uint) Class;
     uint totalvalue;
     uint public _3rdclassprice;
@@ -33,7 +33,7 @@ contract ticketer{
     uint public AmountofFirstClassAvailable;
     uint public AmountofSecondClassAvailable;
     uint public AmountofThirdClassAvailable;
-    address CreatorAddress;
+    address public CreatorAddress;
 
     //Constuctor for setting ticket price aswell as setting the creator address.
     constructor(address creator, uint _1stprice, uint _2ndprice, uint _3rdprice, uint _1stQuantity, uint _2ndQuantity, uint _3rdQuantity) {
@@ -60,8 +60,8 @@ contract ticketer{
      if and only if the purchasing conditions are made.*/
      function buyticket(uint class) payable public {
         totalvalue = msg.value;
-        passthroughvalue[msg.sender] + msg.value;
-        currentvalue[msg.sender] + passthroughvalue[msg.sender];
+        passthroughvalue[msg.sender] += msg.value;
+        currentvalue[msg.sender] += passthroughvalue[msg.sender];
         passthroughvalue[msg.sender] = 0;
         if(currentvalue[msg.sender] == _3rdclassprice && class == 3) {
             ticket[msg.sender] = Ticketer(class = 3);
@@ -78,6 +78,5 @@ contract ticketer{
         } else {
             payable(msg.sender).call{value: currentvalue[msg.sender]}("");
         }
-     }
-
+    }
 }
