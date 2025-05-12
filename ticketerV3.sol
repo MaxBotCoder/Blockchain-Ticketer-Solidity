@@ -8,8 +8,8 @@ contract InitializationContract{
 
     //Transfers ticket purchasing system configuration over to ticker smart contract.
     ticketer public ticketermaker;
-    function deployticketer (uint _1stclassprice, uint _2ndclassprice, uint _3rdclassprice) public {
-        ticketermaker = new ticketer(msg.sender, _1stclassprice, _2ndclassprice, _3rdclassprice);
+    function deployticketer (uint _1stclassprice, uint _2ndclassprice, uint _3rdclassprice, uint _1stQuantity, uint _2ndQuantity, uint _3rdQuantity) public {
+        ticketermaker = new ticketer(msg.sender, _1stclassprice, _2ndclassprice, _3rdclassprice, _1stQuantity, _2ndQuantity, _3rdQuantity);
     }
 
     //Configures the value of total balance variable
@@ -30,14 +30,20 @@ contract ticketer{
     uint public _3rdclassprice;
     uint public _2ndclassprice;
     uint public _1stclassprice;
+    uint public AmountofFirstClassAvailable;
+    uint public AmountofSecondClassAvailable;
+    uint public AmountofThirdClassAvailable;
     address CreatorAddress;
 
     //Constuctor for setting ticket price aswell as setting the creator address.
-    constructor(address creator, uint _1stprice, uint _2ndprice, uint _3rdprice) {
+    constructor(address creator, uint _1stprice, uint _2ndprice, uint _3rdprice, uint _1stQuantity, uint _2ndQuantity, uint _3rdQuantity) {
         CreatorAddress = creator;
         _3rdclassprice = _3rdprice;
         _2ndclassprice = _2ndprice;
         _1stclassprice = _1stprice;
+        AmountofFirstClassAvailable = _1stQuantity;
+        AmountofSecondClassAvailable = _2ndQuantity;
+        AmountofThirdClassAvailable = _3rdQuantity;
     }
 
     /*Struct to save ticketing info, this only saves class however the capabilities can be
@@ -59,10 +65,16 @@ contract ticketer{
         passthroughvalue[msg.sender] = 0;
         if(currentvalue[msg.sender] == _3rdclassprice && class == 3) {
             ticket[msg.sender] = Ticketer(class = 3);
+            AmountofThirdClassAvailable--;
+            payable(CreatorAddress).call{value: currentvalue[msg.sender]}("");
         } else if (currentvalue[msg.sender] == _2ndclassprice && class == 2) {
             ticket[msg.sender] = Ticketer(class = 2);
+            AmountofSecondClassAvailable--;
+            payable(CreatorAddress).call{value: currentvalue[msg.sender]}("");
         } else if (currentvalue[msg.sender] == _1stclassprice && class == 1) {
             ticket[msg.sender] = Ticketer(class = 1);
+            AmountofFirstClassAvailable--;
+            payable(CreatorAddress).call{value: currentvalue[msg.sender]}("");
         } else {
             payable(msg.sender).call{value: currentvalue[msg.sender]}("");
         }
