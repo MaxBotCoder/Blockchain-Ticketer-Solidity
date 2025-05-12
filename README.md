@@ -14,6 +14,7 @@ Step 2: Navigate to the left side menu within Remix IDE and click on the Deploy 
 
 Step 3: Then select the method of execution, by default there should be 1 or more test environments free of any charge with no gass fees. 
 Although you should also get options for running the code on chain via WalletConnetct, Hardhat etc... however hosting onchain will incure gass fees.
+![DEPLOYMENTOPTIONS](https://github.com/user-attachments/assets/d54c95c8-cfad-40ab-a5e7-405957b21398)
 
 
 Step 4: Assuming you have your desired execution configuration 
