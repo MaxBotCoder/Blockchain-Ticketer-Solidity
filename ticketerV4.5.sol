@@ -59,9 +59,9 @@ contract ticketer{
      to select their class aswell. Will only set desired struct data 
      if and only if the purchasing conditions are made.*/
      function buyticket(uint class) payable public {
-        totalvalue = msg.value;
-        passthroughvalue[msg.sender] += msg.value;
-        currentvalue[msg.sender] += passthroughvalue[msg.sender];
+        totalvalue += msg.value;
+        passthroughvalue[msg.sender] = msg.value;
+        currentvalue[msg.sender] = passthroughvalue[msg.sender];
         passthroughvalue[msg.sender] = 0;
         if(currentvalue[msg.sender] == _3rdclassprice && class == 3) {
             ticket[msg.sender] = Ticketer(class = 3);
